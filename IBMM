@@ -1,1 +1,18 @@
-aaaaa
+Predict whether the first stage of SpaceX Falcon 9 will land successfully using:
+- Web scraping + SpaceX API
+- SQL + Pandas EDA
+- Interactive Folium maps
+- Plotly Dash dashboard
+- Machine Learning 
+
+ Final Results
+- Success rate: 66.67%
+- Best ML model: VM (rbf kernel)** → 83.33% accuracy
+- Test samples: 18
+- Geosynchronous orbit launches: **5** (GEO)
+
+Repository Structure
+- `notebooks/` → All 8 completed Jupyter notebooks
+- `data/` → Cleaned datasets
+- `maps/` → Interactive Folium map
+- `Final_Presentation_SpaceX.pdf`
