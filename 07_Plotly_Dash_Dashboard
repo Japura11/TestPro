@@ -1,0 +1,120 @@
+# LAUNCH SITES LOCATION WITH FOLIUM – VERSIÓN CORREGIDA (SIN ERRORES)
+!pip install folium --quiet
+import folium
+from folium.plugins import MarkerCluster, MousePosition
+from folium.features import DivIcon
+import pandas as pd
+
+# Cargar dataset_part_2.csv
+df = pd.read_csv('dataset_part_2.csv')
+
+# TASK 1: Mapa centrado en USA
+spacex_map = folium.Map(location=[29.5596849, -95.083097], zoom_start=5)
+
+# Agrupar por sitios únicos
+launch_sites_df = df.groupby('LaunchSite').first().reset_index()[['LaunchSite', 'Latitude', 'Longitude']]
+
+# Cluster de marcadores
+marker_cluster = MarkerCluster()
+
+# TASK 2: Marcadores para cada sitio de lanzamiento
+for _, site in launch_sites_df.iterrows():
+    folium.CircleMarker(
+        location=[site['Latitude'], site['Longitude']],
+        radius=50,
+        color='#d35400',
+        fill=True,
+        fillColor='#d35400',
+        fillOpacity=0.7,
+        popup=f"<b>{site['LaunchSite']}</b><br>Lat: {site['Latitude']}<br>Lon: {site['Longitude']}"
+    ).add_to(spacex_map)
+
+    # Etiqueta personalizada
+    folium.Marker(
+        location=[site['Latitude'], site['Longitude']],
+        icon=DivIcon(
+            icon_size=(20,20),
+            icon_anchor=(0,0),
+            html=f'<div style="font-size: 12pt; color:#d35400; font-weight: bold;"><b>{site["LaunchSite"]}</b></div>'
+        )
+    ).add_to(marker_cluster)
+
+# TASK 3: Marcadores de éxito/fracaso para cada lanzamiento
+for idx, row in df.iterrows():
+    color = 'green' if row['Class'] == 1 else 'red'
+    folium.CircleMarker(
+        location=[row['Latitude'], row['Longitude']],
+        radius=8,
+        color=color,
+        fill=True,
+        fillColor=color,
+        fillOpacity=0.8,
+        popup=f"Flight {row['FlightNumber']}<br>Payload: {row['PayloadMass']} kg<br>Success: {'YES' if row['Class'] == 1 else 'NO'}"
+    ).add_to(marker_cluster)
+
+marker_cluster.add_to(spacex_map)
+
+# TASK 4: Líneas de distancia a puntos cercanos (ej. costa, ciudad, carretera)
+# Coordenadas de referencia para CCAFS SLC 40
+site_lat, site_lon = 28.562302, -80.577356  # CCAFS SLC 40
+
+# Puntos cercanos de interés
+proximities = {
+    'Atlantic Coast': [28.562302, -80.577356 - 0.1],  # Costa atlántica (100 km aprox.)
+    'Kennedy Space Center': [28.573255, -80.646895],   # KSC
+    'Nearest Highway (I-95)': [28.6000, -80.6000],     # Carretera cercana
+    'Closest City (Titusville)': [28.6122, -80.8078]    # Ciudad cercana
+}
+
+for name, (lat, lon) in proximities.items():
+    # Calcular distancia aproximada en km
+    distance = ((site_lat - lat)**2 + (site_lon - lon)**2)**0.5 * 111
+
+    # Línea de distancia
+    folium.PolyLine(
+        locations=[[site_lat, site_lon], [lat, lon]],
+        color="blue",
+        weight=3,
+        opacity=0.8,
+        popup=f"{name}<br>Distancia: {distance:.1f} km"
+    ).add_to(spacex_map)
+
+    # Marcador del punto cercano
+    folium.Marker(
+        location=[lat, lon],
+        icon=folium.Icon(color='blue', icon='info-sign'),
+        popup=f"<b>{name}</b><br>Distancia: {distance:.1f} km"
+    ).add_to(spacex_map)
+
+# CAPAS ADICIONALES (SIN ERRORES DE ATTRIBUTION)
+# Capa de terreno (con attribution correcta)
+folium.TileLayer(
+    tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    attr='Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    name='Satellite',
+    overlay=False,
+    control=True
+).add_to(spacex_map)
+
+# Capa básica de OpenStreetMap
+folium.TileLayer('OpenStreetMap').add_to(spacex_map)
+
+# Posición del mouse
+MousePosition(
+    prefix='Mouse Position:',
+    separator=' Lat: '
+).add_to(spacex_map)
+
+# Control de capas
+folium.LayerControl().add_to(spacex_map)
+
+# Título del mapa
+title_html = '''
+             <h3 align="center" style="font-size:16px"><b>SpaceX Launch Sites & Success Rates</b></h3>
+             '''
+spacex_map.get_root().html.add_child(folium.Element(title_html))
+
+# Guardar y mostrar
+spacex_map.save('spacex_launch_sites_map.html')
+print("¡Mapa guardado como 'spacex_launch_sites_map.html'!")
+spacex_map
