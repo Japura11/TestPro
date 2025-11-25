@@ -1,0 +1,8 @@
+Flight No.,Date,Time,Version Booster,Launch site,Payload,Payload mass,Orbit,Customer,Launch outcome,Booster landing
+14,10 January 2015,09:47,F9 v1.1B1012[8],"Cape Canaveral,LC-40",SpaceX CRS-5[68](Dragon C107),"2,395 kg (5,280 lb)[69]",LEO(ISS),NASA(CRS),Success[70],Failure(drone ship)
+15,11 February 2015,23:03,F9 v1.1B1013[8],"Cape Canaveral,LC-40",DSCOVR[68][73],"570 kg (1,260 lb)",HEO(Sun–Earth L1insertion),USAFNASANOAA,Success,Controlled(ocean)[d]
+16,2 March 2015,03:50,F9 v1.1B1014[8],"Cape Canaveral,LC-40",ABS-3AEutelsat 115 West B[68],"4,159 kg (9,169 lb)",GTO,ABSEutelsat,Success,No attempt[77]
+17,14 April 2015,20:10,F9 v1.1B1015[8],"Cape Canaveral,LC-40",SpaceX CRS-6[68](DragonC108.1),"1,898 kg (4,184 lb)[82]",LEO(ISS),NASA(CRS),Success,Failure[83](drone ship)
+18,27 April 2015,23:03,F9 v1.1B1016[8],"Cape Canaveral,LC-40",TürkmenÄlem 52°E / MonacoSAT[68][87],"4,707 kg (10,377 lb)",GTO,Turkmenistan NationalSpace Agency[88],Success,No attempt[89]
+19,28 June 2015,14:21,F9 v1.1B1018[8],"Cape Canaveral,LC-40",SpaceX CRS-7[68](Dragon C109),"1,952 kg (4,303 lb)[92]",LEO(ISS),NASA(CRS),Failure[93](in flight),Precluded[94](drone ship)
+20,22 December 2015,01:29,F9 FTB1019.1[98],"Cape Canaveral,LC-40",Orbcomm-OG2-2(11 satellites)[22][97],"2,034 kg (4,484 lb)",LEO,Orbcomm,Success,Success[99](ground pad)
